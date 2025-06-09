@@ -13,6 +13,7 @@ const requestLogger = morgan(function (tokens, req, res) {
   ].join(' ')
 })
 
+app.use(express.static('dist'))
 app.use(express.json())
 app.use(requestLogger)
 
