@@ -10,7 +10,9 @@ const api = supertest(app)
 
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
+    const savedUser = await helper.insertUserInDb()
     await Blog.deleteMany({})
+    helper.initialBlogs.forEach(b => b.user = savedUser.id)
     await Blog.insertMany(helper.initialBlogs)
   })
 
@@ -40,6 +42,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', await helper.authorizationToken())
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -60,6 +63,7 @@ describe('when there is initially some blogs saved', () => {
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', await helper.authorizationToken())
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -75,6 +79,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', await helper.authorizationToken())
         .send(newBlog)
         .expect(400)
 
@@ -90,8 +95,27 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', await helper.authorizationToken())
         .send(newBlog)
         .expect(400)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
+    test('fails with statuscode 401 if token not provided', async () => {
+      const newBlog = {
+        title: 'How to write good tests',
+        author: 'Robert C. Martin',
+        url: 'https://www.google.com',
+        likes: 11,
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
@@ -105,6 +129,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('Authorization', await helper.authorizationToken())
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDb()
@@ -115,11 +140,24 @@ describe('when there is initially some blogs saved', () => {
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
     })
 
+    test('fails with statuscode 401 if token not provided', async () => {
+      const blogsAtStart = await helper.blogsInDb()
+      const blogToDelete = blogsAtStart[0]
+
+      await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(401)
+
+      const blogsAtEnd = await helper.blogsInDb()
+      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+    })
+
     test('fails with statuscode 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445'
 
       await api
         .delete(`/api/blogs/${invalidId}`)
+        .set('Authorization', await helper.authorizationToken())
         .expect(400)
     })
   })
