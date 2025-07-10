@@ -12,7 +12,6 @@ const tokenExtractor = (request, response, next) => {
 
 const userExtractor = async (request, response, next) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET)
-  console.log(`ÁNGEL decodedToken - ${JSON.stringify(decodedToken)}`)
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'token invalid' })
   }
