@@ -40,7 +40,7 @@ const App = () => {
   )
 
   const blogForm = () => (
-    <Togglable buttonLabel="new note" ref={blogFormRef}>
+    <Togglable buttonLabel="create new blog" ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
@@ -94,7 +94,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs(blogs)
     )  
   }, [])
 
