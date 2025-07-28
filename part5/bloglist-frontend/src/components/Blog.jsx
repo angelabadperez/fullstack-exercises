@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, likeBlog }) => {
+const Blog = ({ blog, likeBlog, removeBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const showWhenShowDetails = { display: showDetails ? '' : 'none' }
   const detailsButtonTitle = showDetails ? 'hide' : 'view'
@@ -32,6 +32,14 @@ const Blog = ({ blog, likeBlog }) => {
     )
   }
 
+  const deleteBlog = (event) => {
+    event.preventDefault()
+
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
+        removeBlog(blog.id)
+    }
+  }
+
   return (
     <div style={blogStyle}>
       <div>
@@ -46,6 +54,9 @@ const Blog = ({ blog, likeBlog }) => {
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button onClick={updateBlog}>like</button></p>
           <p>{blog.user.name}</p>
+          {blog.user && blog.user.username === JSON.parse(window.localStorage.getItem('loggedBlogListUser')).username &&
+            <button onClick={deleteBlog}>remove</button>
+          }
         </div>
       </div>
     </div>  

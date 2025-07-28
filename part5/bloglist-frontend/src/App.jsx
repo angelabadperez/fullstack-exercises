@@ -100,6 +100,18 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async id => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(blog => blog.id != id))
+      setNotification({message: `you have remove a blog`, type: 'success'})
+      resetNotification()
+    } catch (error) {
+      setNotification({message: error.response.data.error, type: 'error'})
+      resetNotification()
+    }
+  }
+
   const resetNotification = () => { 
     setTimeout(() => {
       setNotification({message: '', type: ''})
@@ -133,7 +145,7 @@ const App = () => {
         </div>
       }
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={updateBlog} />
+        <Blog key={blog.id} blog={blog} likeBlog={updateBlog} removeBlog={deleteBlog} />
       )}
     </div>
   )
