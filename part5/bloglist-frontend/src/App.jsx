@@ -86,6 +86,18 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (id, blogObject) => {
+    try {
+      const updatedBlog = await blogService.update(id, blogObject)
+      setBlogs(blogs.map(blog => blog.id === id ? updatedBlog : blog))
+      setNotification({message: `you have liked ${updatedBlog.title} by ${updatedBlog.author}`, type: 'success'})
+      resetNotification()
+    } catch (error) {
+      setNotification({message: error.response.data.error, type: 'error'})
+      resetNotification()
+    }
+  }
+
   const resetNotification = () => { 
     setTimeout(() => {
       setNotification({message: '', type: ''})
@@ -119,7 +131,7 @@ const App = () => {
         </div>
       }
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} likeBlog={updateBlog} />
       )}
     </div>
   )

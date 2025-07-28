@@ -1,6 +1,8 @@
+const { ObjectId } = require('mongodb')
 const blogsRouter = require('express').Router()
 const { userExtractor } = require('../utils/middleware')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -40,10 +42,13 @@ blogsRouter.put('/:id', async (request, response) => {
     return response.status(404).end()
   }
 
+  const user = await User.findById(newBlog.user)
+
   blog.title = newBlog.title
   blog.author = newBlog.author
   blog.url = newBlog.url
   blog.likes = newBlog.likes
+  blog.user = user
 
   const updatedBlog = await blog.save()
   response.json(updatedBlog)
