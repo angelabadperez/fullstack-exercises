@@ -11,7 +11,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState({message: '', type: ''})
+  const [notification, setNotification] = useState({ message: '', type: '' })
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
@@ -21,7 +21,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -30,7 +30,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -38,7 +38,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const blogForm = () => (
@@ -50,17 +50,17 @@ const App = () => {
   const handleLogin = async event => {
     event.preventDefault()
 
-    try { 
+    try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogListUser', JSON.stringify(user))
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
-      setNotification({message: `Logged in as ${user.name}`, type: 'success'})
+      setNotification({ message: `Logged in as ${user.name}`, type: 'success' })
       resetNotification()
     } catch (error) {
-      setNotification({message: error.response.data.error, type: 'error'})
+      setNotification({ message: error.response.data.error, type: 'error' })
       resetNotification()
     }
   }
@@ -70,7 +70,7 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogListUser')
     blogService.setToken(null)
     setUser(null)
-    setNotification({message: `Logged out`, type: 'success'})
+    setNotification({ message: 'Logged out', type: 'success' })
     resetNotification()
   }
 
@@ -80,10 +80,10 @@ const App = () => {
     try {
       const createdBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(createdBlog))
-      setNotification({message: `a new blog ${createdBlog.title} by ${createdBlog.author} added`, type: 'success'})
+      setNotification({ message: `a new blog ${createdBlog.title} by ${createdBlog.author} added`, type: 'success' })
       resetNotification()
     } catch (error) {
-      setNotification({message: error.response.data.error, type: 'error'})
+      setNotification({ message: error.response.data.error, type: 'error' })
       resetNotification()
     }
   }
@@ -92,10 +92,10 @@ const App = () => {
     try {
       const updatedBlog = await blogService.update(id, blogObject)
       setBlogs(blogs.map(blog => blog.id === id ? updatedBlog : blog))
-      setNotification({message: `you have liked ${updatedBlog.title} by ${updatedBlog.author}`, type: 'success'})
+      setNotification({ message: `you have liked ${updatedBlog.title} by ${updatedBlog.author}`, type: 'success' })
       resetNotification()
     } catch (error) {
-      setNotification({message: error.response.data.error, type: 'error'})
+      setNotification({ message: error.response.data.error, type: 'error' })
       resetNotification()
     }
   }
@@ -103,25 +103,25 @@ const App = () => {
   const deleteBlog = async id => {
     try {
       await blogService.remove(id)
-      setBlogs(blogs.filter(blog => blog.id != id))
-      setNotification({message: `you have remove a blog`, type: 'success'})
+      setBlogs(blogs.filter(blog => blog.id !== id))
+      setNotification({ message: 'you have remove a blog', type: 'success' })
       resetNotification()
     } catch (error) {
-      setNotification({message: error.response.data.error, type: 'error'})
+      setNotification({ message: error.response.data.error, type: 'error' })
       resetNotification()
     }
   }
 
-  const resetNotification = () => { 
+  const resetNotification = () => {
     setTimeout(() => {
-      setNotification({message: '', type: ''})
+      setNotification({ message: '', type: '' })
     }, 5000)
   }
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -137,7 +137,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={notification.message} type={notification.type} />
-      {user === null ? 
+      {user === null ?
         loginForm() :
         <div>
           <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>

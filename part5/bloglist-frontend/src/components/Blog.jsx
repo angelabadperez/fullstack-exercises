@@ -36,16 +36,16 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
     event.preventDefault()
 
     if (window.confirm(`Remove ${blog.title} by ${blog.author}?`)) {
-        removeBlog(blog.id)
+      removeBlog(blog.id)
     }
   }
 
   return (
     <div style={blogStyle}>
       <div>
-        {blog.title} {blog.author} 
-        <button 
-          style={detailsButtonStyle} 
+        {blog.title} {blog.author}
+        <button
+          style={detailsButtonStyle}
           onClick={() => setShowDetails(!showDetails) }
         >
           {detailsButtonTitle}
@@ -59,7 +59,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
           }
         </div>
       </div>
-    </div>  
+    </div>
   )
 }
 
