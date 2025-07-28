@@ -17,6 +17,14 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
     marginLeft: 5
   }
 
+  const removeBlogButton = () => {
+    const loggedUser = JSON.parse(window.localStorage.getItem('loggedBlogListUser'))
+    if (loggedUser && blog.user && blog.user.username === loggedUser.username) {
+      return <button onClick={deleteBlog}>remove</button>
+    }
+    return null
+  }
+
   const updateBlog = (event) => {
     event.preventDefault()
 
@@ -54,9 +62,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
           <p>{blog.url}</p>
           <p>likes {blog.likes} <button onClick={updateBlog}>like</button></p>
           <p>{blog.user.name}</p>
-          {blog.user && blog.user.username === JSON.parse(window.localStorage.getItem('loggedBlogListUser')).username &&
-            <button onClick={deleteBlog}>remove</button>
-          }
+          {removeBlogButton()}
         </div>
       </div>
     </div>
