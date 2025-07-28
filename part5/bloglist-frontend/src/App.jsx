@@ -13,6 +13,8 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification] = useState({message: '', type: ''})
 
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+
   const blogFormRef = useRef()
 
   const loginForm = () => (
@@ -130,7 +132,7 @@ const App = () => {
           {blogForm()}
         </div>
       }
-      {blogs.map(blog =>
+      {sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} likeBlog={updateBlog} />
       )}
     </div>
