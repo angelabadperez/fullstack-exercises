@@ -44,5 +44,17 @@ export default [
       'no-unused-vars': 0,
     },
   },
+    {
+    files: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
+    plugins: {
+      vitest: vitest,
+    },
+    languageOptions: {
+      globals: vitest.environments['vitest-globals'].globals,
+    },
+    rules: {
+      ...vitest.configs.recommended.rules,
+    },
+  },
 ]
 
