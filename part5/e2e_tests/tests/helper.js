@@ -11,16 +11,14 @@ const createBlog = async (page, content) => {
   await page.getByTestId('author').fill(content.author)
   await page.getByTestId('url').fill(content.url)
   await page.getByRole('button', { name: 'create' }).click()
-  await page.locator('span', { hasText: content.title }).waitFor()
+  await page.getByText(`${content.title} by ${content.author}`).waitFor()
 }
 
-const likeBlog = async (page, title, expectedLikes) => {
-  let noteElement = await page.locator('span', { hasText: title }).locator('..')
-  const isExpanded = await noteElement.getByRole('button', { name: 'hide' }).isVisible()
-  if (!isExpanded) {
-    await noteElement.getByRole('button', { name: 'view' }).click()
+const likeTimes = async (page, button, n) => {
+  for (let i = 0; i<n; i++) {
+    await button.click()
+    await page.getByText(`likes ${i+1}`).waitFor()
   }
-  await noteElement.getByRole('button', { name: 'like' }).click()
 }
 
-export { loginWith, createBlog, likeBlog }
+export { loginWith, createBlog, likeTimes }

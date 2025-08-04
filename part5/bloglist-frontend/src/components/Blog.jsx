@@ -51,7 +51,7 @@ const Blog = ({ blog, likeBlog, removeBlog }) => {
   return (
     <div style={blogStyle}>
       <div>
-        <span className='blog-info'>{blog.title} {blog.author}</span>
+        {blog.title} {blog.author}
         <button
           style={detailsButtonStyle}
           onClick={() => setShowDetails(!showDetails) }
