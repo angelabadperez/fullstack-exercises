@@ -34,14 +34,13 @@ export const create = content => {
   }
 }
 
-export const voteAnecdote = (id) => {
-  return async (dispatch, getState) => {
-    const anecdoteToChange = getState().anecdotes.find(a => a.id === id)
+export const voteAnecdote = anecdote => {
+  return async dispatch => {
     const changedAnecdote = {
-        ...anecdoteToChange,
-        votes: anecdoteToChange.votes + 1
+        ...anecdote,
+        votes: anecdote.votes + 1
       }
-    const updatedAnecdote = await anecdoteService.vote(id, changedAnecdote)
+    const updatedAnecdote = await anecdoteService.vote(changedAnecdote)
     dispatch(replaceAnecdote(updatedAnecdote))
   }
 }
