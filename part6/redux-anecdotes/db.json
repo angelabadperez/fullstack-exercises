@@ -39,6 +39,11 @@
       "id": "ac67",
       "content": "another one",
       "votes": 0
+    },
+    {
+      "id": "3b5b",
+      "content": "using async action",
+      "votes": 0
     }
   ]
 }
