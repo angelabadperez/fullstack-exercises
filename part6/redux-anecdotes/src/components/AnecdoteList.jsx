@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { vote } from '../reducers/anecdoteReducer'
+import { voteAnecdote } from '../reducers/anecdoteReducer'
 import { createNotification, removeNotification } from '../reducers/notificationReducer'
 
 const Anecdote = ({ anecdote, handleClick }) => {
@@ -37,8 +37,8 @@ const AnecdoteList = () => {
     return filteredAnecdotes
   })
 
-  const voteAnecdote = (anecdote) => {
-    dispatch(vote(anecdote.id))
+  const vote = (anecdote) => {
+    dispatch(voteAnecdote(anecdote.id))
     dispatch(createNotification(`you voted '${anecdote.content}'`))
     setTimeout(() => {
       dispatch(removeNotification())
@@ -51,7 +51,7 @@ const AnecdoteList = () => {
         <Anecdote
           key={anecdote.id}
           anecdote={anecdote}
-          handleClick={() => voteAnecdote(anecdote)}
+          handleClick={() => vote(anecdote)}
         />
       ))}
     </div>
